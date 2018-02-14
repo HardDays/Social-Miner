@@ -1,3 +1,6 @@
+# In dir
+posts/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -99,3 +102,5 @@ ENV/
 
 # mypy
 .mypy_cache/
+.DS_Store
+.idea/
