@@ -45,8 +45,8 @@ class PostMiner:
                         try:
                             R = 70
                             r = 20
-                            # grid = mk_grid(point, R=R, r=r)
-                            grid = [point]
+                            grid = mk_grid(point, R=R, r=r)
+                            # grid = [point]
                             print(f"Grid: {len(grid)} points")
                             
                             posts = []
