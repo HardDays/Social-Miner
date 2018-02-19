@@ -18,8 +18,8 @@ class VKProvider(PostProvider):
     def get_posts(self, point: Point, radius=50, lang='en', wo_coords=False, count=0):
         q = ' '
         limit = 200  # VK limit
-        min_date = 951858000.0  # datetime.datetime(2000,3,1,0,0).timestamp()
         max_date = time.time()
+        min_date = max_date - 604800.0 # week ago
         
         if not count:
             batch = True
@@ -46,8 +46,10 @@ class VKProvider(PostProvider):
                 params['start_from'] = res['next_from']
                 res = self.vk_api.newsfeed.search(**params)
                 feed.extend([VKPost(r) for r in res[1:]])
+                time.sleep(0.5)
         except Exception as e:
             print(f"EXEPTION: {e}")
+            time.sleep(60)
         return feed
     
     def _to_vk_point(self, point):

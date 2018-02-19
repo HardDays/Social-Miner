@@ -5,7 +5,7 @@ import datetime
 from providers.Twitter import Twitter
 from models.Point import Point
 from GridMaker import mk_grid
-from providers.VKProvider import VKProvider
+from providers.VK import VKProvider
 
 
 class PostMiner:
@@ -14,7 +14,7 @@ class PostMiner:
             'tweets': Twitter()
         }
         # self.networks = {
-        #     'tweets': Twitter(),
+        #     # 'tweets': Twitter(),
         #     'vk': VKProvider()
         # }
     
@@ -108,7 +108,7 @@ pm = PostMiner()
 while True:
     print("\n\nLet's start new cycle!\n")
     
-    pm.get_posts(cities, count=10)
+    pm.get_posts(cities, count=0)
     
     sleep_time = 6 * 24 * 60 * 60 * 60
     # sleep_time = 60
