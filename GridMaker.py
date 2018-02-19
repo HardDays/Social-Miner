@@ -21,7 +21,7 @@ def haversine(lon1, lat1, lon2, lat2):
     return km
 
 
-def mk_grid(center, R, r=20):
+def mk_grid(center: Point, R, r=20):
     step = r * 1 / 2
     # the number of kilometers in one radian
     # kms_per_radian = 6371.0088

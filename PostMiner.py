@@ -1,52 +1,71 @@
-import tweepy
 import time
 import pandas as pd
 import datetime
 
-from Twitter import Twitter
+from providers.Twitter import Twitter
 from models.Point import Point
+from GridMaker import mk_grid
+from providers.VKProvider import VKProvider
 
 
 class PostMiner:
     def __init__(self):
         self.networks = {
-            'twitter': Twitter()
+            'tweets': Twitter()
         }
+        # self.networks = {
+        #     'tweets': Twitter(),
+        #     'vk': VKProvider()
+        # }
     
-    def get_posts(self, points, networks=None, langs=None, count = -1):
+    def get_posts(self, points, networks=None, langs=None, count=0):
         if not networks:
             networks = self.networks.keys()
         if not langs:
             langs = ['ru', 'en', 'all_lngs']
-            
+        
         for net_name in networks:
             
             for point, point_name in zip(points.values(), points.keys()):
                 
                 for lang in langs:
                     
-                    for wo_coords in [False, True]:
+                    if net_name == 'tweets':
+                        v = [False, True]
+                    else:
+                        v = [True]
+                        
+                    for wo_coords in v:
                         print("Searching:")
+                        print(f"Network:     {net_name}")
                         print(f"Place:       {point_name}")
                         print(f"Lang:        {lang}")
                         print(f"Coordinates: {not wo_coords}")
                         
                         try:
-                            posts = self.networks[net_name].get_posts(point, lang, wo_coords, count)
+                            R = 70
+                            r = 20
+                            # grid = mk_grid(point, R=R, r=r)
+                            grid = [point]
+                            print(f"Grid: {len(grid)} points")
                             
-                            print(f"Found tweets {len(posts)}\n")
+                            posts = []
+                            for p in grid:
+                                posts.extend(self.networks[net_name].get_posts(p, r, lang, wo_coords, count))
+                            
+                            print(f"Found posts {len(posts)}\n")
                             
                             if len(posts) > 0:
                                 self.save_to_csv(net_name, posts, point_name, lang, wo_coords)
                         except Exception as e:
                             print(e)
     
-    def get_dest(n_cords):
+    def get_dest(self, n_cords):
         if n_cords:
             return "wo_coords"
         else:
             return "with_coords"
-
+    
     def save_to_csv(self, network, posts, city, language, without_cords):
         df = pd.DataFrame(columns=['coordinates',
                                    'language',
@@ -58,9 +77,10 @@ class PostMiner:
         
         for i, post in enumerate(posts):
             df.loc[i] = post.for_csv()
-
-        df.to_csv(f"posts/{network}/{self.get_dest(without_cords)}/{city}_{language}_{self.today()}.csv", encoding='utf-8')
-
+        
+        df.to_csv(f"posts/{network}/{self.get_dest(without_cords)}/{city}_{language}_{self.today()}.csv",
+                  encoding='utf-8')
+    
     def today(self):
         return f"{datetime.datetime.today().time().hour}_" \
                f"{datetime.datetime.today().time().minute}__" \
@@ -86,13 +106,12 @@ cities = {
 pm = PostMiner()
 
 while True:
-    
     print("\n\nLet's start new cycle!\n")
     
-    pm.get_posts(cities)
+    pm.get_posts(cities, count=10)
     
-    # sleep_time = 6 * 24 * 60 * 60 * 60
-    sleep_time = 60
+    sleep_time = 6 * 24 * 60 * 60 * 60
+    # sleep_time = 60
     
     print(f"\n\n    ATTENTION! \n\nSleeping for {sleep_time} seconds, see ya!\n")
     

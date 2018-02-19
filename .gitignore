@@ -1,5 +1,10 @@
 # In dir
-posts/
+posts/tweets/with_coords/*
+posts/tweets/wo_coords/*
+
+!posts/tweets/with_coords/.gitkeep
+!posts/tweets/wo_coords/.gitkeep
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

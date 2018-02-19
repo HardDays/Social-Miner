@@ -1,13 +1,10 @@
 import tweepy
-import time
-import pandas as pd
-import datetime
 
-from models.Point import Point
 from models.post.Tweet import Tweet
+from providers.PostProvider import PostProvider
 
 
-class Twitter:
+class Twitter(PostProvider):
     
     credentials = [{
         "api_key": "7gIWHgOmLgzJQ12z2gUfnyzFK",
@@ -22,7 +19,7 @@ class Twitter:
     }]
 
     def __init__(self):
-        cred = self.credentials[1]
+        cred = self.credentials[0]
         self.app_auth(cred['api_key'], cred['api_secret'])
         
     def app_auth(self, consumer_key, consumer_secret):
@@ -31,9 +28,9 @@ class Twitter:
         self.app_api.wait_on_rate_limit = True
         self.app_api.wait_on_rate_limit_notify = True
     
-    def get_posts(self, point, lang, wo_coords, count=-1):
+    def get_posts(self, point, radius=50, lang='en', wo_coords=False, count=0):
         q = '*'
-        geocode = "%f,%f,%s" % (point.latitude, point.longitude, '50km')
+        geocode = f"{point.latitude},{point.longitude},{radius}km"
         
         tweets = []
         try:
