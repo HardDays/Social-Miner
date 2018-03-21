@@ -2,7 +2,7 @@ import time
 from typing import List
 
 import vk
-from providers.PostProvider import PostProvider
+from providers.AProvider import PostProvider
 from models.post.VKPost import VKPost
 
 from models.post.APost import APost

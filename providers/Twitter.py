@@ -1,7 +1,7 @@
 import tweepy
 
 from models.post.Tweet import Tweet
-from providers.PostProvider import PostProvider
+from providers.AProvider import PostProvider
 
 
 class Twitter(PostProvider):
@@ -28,7 +28,7 @@ class Twitter(PostProvider):
         self.app_api.wait_on_rate_limit = True
         self.app_api.wait_on_rate_limit_notify = True
     
-    def get_posts(self, point, radius=50, lang='en', wo_coords=False, count=0):
+    def get_posts(self, point, radius=50, lang='en', wo_coords=False, count=0, from_data="", to_data=""):
         q = '*'
         geocode = f"{point.latitude},{point.longitude},{radius}km"
         

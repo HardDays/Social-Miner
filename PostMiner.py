@@ -2,25 +2,25 @@ import time
 import pandas as pd
 import datetime
 
+
 from providers.Twitter import Twitter
 from models.Point import Point
 from GridMaker import mk_grid
 from providers.VK import VKProvider
 
 
-class PostMiner:
-    def __init__(self):
-        self.networks = {
-            'tweets': Twitter()
-        }
-        # self.networks = {
-        #     # 'tweets': Twitter(),
-        #     'vk': VKProvider()
-        # }
+class PostMiner():
+    def __init__(self, networks=None):
+        if not networks:
+            self.networks = {
+                'tweets': Twitter()
+            }
     
-    def get_posts(self, points, networks=None, langs=None, count=0):
+    def get_posts(self, points, networks=None, langs=None, count=0, wo_coord=True):
         if not networks:
             networks = self.networks.keys()
+        else:
+            networks = [key for key in networks if key in self.networks.keys()]
         if not langs:
             langs = ['ru', 'en', 'all_lngs']
         
@@ -30,12 +30,12 @@ class PostMiner:
                 
                 for lang in langs:
                     
-                    if net_name == 'tweets':
-                        v = [False, True]
+                    if net_name == 'tweets' and wo_coord:
+                        need_coordinates = [False, True]
                     else:
-                        v = [True]
-                        
-                    for wo_coords in v:
+                        need_coordinates = [True]
+                    
+                    for wo_coords in need_coordinates:
                         print("Searching:")
                         print(f"Network:     {net_name}")
                         print(f"Place:       {point_name}")
