@@ -76,7 +76,7 @@ class PostMiner():
                                    'models'])
         
         for i, post in enumerate(posts):
-            df.loc[i] = post.for_csv()
+            df.loc[i] = post.for_df()
         
         df.to_csv(f"posts/{network}/{self.get_dest(without_cords)}/{city}_{language}_{self.today()}.csv",
                   encoding='utf-8')

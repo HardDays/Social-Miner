@@ -22,7 +22,7 @@ class FlickrPost(APost):
                f"Coordinates: ({self.get_point().latitude}, {self.get_point().longitude})\n" \
                f"Tags: {self.get_tags()}\n" \
                f"Description: {self.get_text()}\n" \
-               f"URL: {self.get_url()}"
+               f"URL: {self.get_photo_url()}"
     
     def get_tags(self) -> List[str]:
         try:
@@ -48,5 +48,25 @@ class FlickrPost(APost):
     def get_user_id(self) -> str:
         return self._post.get('owner')
     
-    def get_url(self) -> str:
+    def get_photo_url(self) -> str:
         return self._post.get('url_o', '')
+    
+    def for_df(self):
+        """
+        Prepares data to be put in Dataframe with columns:
+            'coordinates',
+            'text',
+            'tags',
+            'creation_time',
+            'user_id',
+            'photo_url'
+            'post'
+        :return:
+        """
+        return self._point.get_tuple(), \
+               self.get_text(), \
+               self.get_tags(), \
+               self.get_creation_time(), \
+               self.get_user_id(), \
+               self.get_photo_url(), \
+               self._get_post()

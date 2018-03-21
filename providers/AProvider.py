@@ -9,7 +9,7 @@ class PostProvider(ABC):
     Abstract models provider
     """
     @abstractmethod
-    def get_posts(self, point: Point, radius: int, lang: str, wo_coords: bool, count=-1, from_data="", to_data=""):
+    def get_posts(self, point: Point, radius: int, lang: str, wo_coords: bool, count=-1):
         """
         Abstract method that every provider must Override.
         Returns ALL posts near given point.

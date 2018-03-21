@@ -47,14 +47,9 @@ class APost(ABC):
     def get_lang(self):
         pass
     
-    def for_csv(self):
-        return self._point.get_tuple(), \
-               self.get_lang(), \
-               self.get_text(), \
-               self.get_tags(), \
-               self.get_creation_time(), \
-               self.get_user_id(), \
-               self._get_post()
+    @abstractmethod
+    def for_df(self):
+        pass
 
     def to_dict(self):
         return {

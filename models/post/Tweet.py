@@ -6,6 +6,7 @@ from models.post.APost import APost
 
 
 class Tweet(APost):
+
     def __init__(self, tweet, point: Point):
         self._tweet = tweet
         self._point = point
@@ -50,3 +51,12 @@ class Tweet(APost):
             coord = self._tweet.coordinates.get('coordinates', None)
             self._point = Point(float(coord[1]), float(coord[0]))
         return self._point
+    
+    def for_df(self):
+        return self._point.get_tuple(), \
+               self.get_lang(), \
+               self.get_text(), \
+               self.get_tags(), \
+               self.get_creation_time(), \
+               self.get_user_id(), \
+               self._get_post()
